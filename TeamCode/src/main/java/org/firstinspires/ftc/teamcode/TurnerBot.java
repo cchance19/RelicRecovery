@@ -32,30 +32,36 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.Range;
 
 
-
-/*
+/**
  * This OpMode uses the common Hardware2858 class to define the devices on the robot.
  * All device access is managed through the Hardware2858 class. (See this class for device names)
  * The code is structured as a LinearOpMode
  *
  * This particular OpMode executes a basic Tank Drive Teleop for the K9 bot
- * It opens and closes the clampLeft using the Gampad A and B buttons respectively.
+ * It opens and closes the clampLeft using the Gamepad A and B buttons respectively.
  * It also opens and closes the clampRight slowly using the A and B buttons.
  */
 
-@TeleOp(name="Mecanum Control 2858", group="MecanumControl2858")
+@TeleOp(name="TurnerBot", group="TurnerBot")
 
-public class MecanumDrive2858 extends LinearOpMode {
+public class TurnerBot extends LinearOpMode {
 
-    // Declare OpMode members.
-    Hardware2858 robot = new Hardware2858();// Use a K9'shareware
+    /* Declare OpMode members. */
+    TurnerHardware2858 robot = new TurnerHardware2858();// Use a K9'shardware
+    double          armTTPosition = robot.ARMTT_HOME;
+    final double    ARMTT_SPEED      = 1;                            // sets rate to move servo
+
 
     @Override
     public void runOpMode() {
+
+        double left;
+        double right;
+        double lift;
+        double string;
 
         // Initialize the hardware variables. The init() method of the hardware class does all the work here
         robot.init(hardwareMap);
@@ -71,25 +77,59 @@ public class MecanumDrive2858 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);                           //Gives R of Polar Coordinates
-            double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;    //Gives THETA of Polar Coordinates
-            double rightX = gamepad1.right_stick_x;                                                         //Turning
+            // Run wheels in tank mode
+            left = -gamepad1.left_stick_y;
+            right = -gamepad1.right_stick_y;
+            lift = gamepad2.right_stick_y;
+            string = gamepad2.left_stick_y;
 
-            final double frontLeft = r * Math.cos(robotAngle) + rightX;                                     //Moves in same direction as BackRight
-            final double frontRight = r * Math.sin(robotAngle) - rightX;                                    //Moves in same direction as BackLeft
-            final double backLeft = r * Math.sin(robotAngle) + rightX;                                      //Moves in same direction as FrontRight
-            final double backRight = r * Math.cos(robotAngle) - rightX;                                     //Moves in same direction as FrontLeft
+            robot.LeftDrive.setPower(left);
+            robot.RightDrive.setPower(right);
 
-            robot.frontLeftDrive.setPower(frontLeft);
-            robot.frontRightDrive.setPower(frontRight);
-            robot.backLeftDrive.setPower(backLeft);
-            robot.backRightDrive.setPower(backRight);
+            if(gamepad2.left_stick_y > 0)
 
-            telemetry.addData("frontLeft",  "%.2f", frontLeft);
-            telemetry.addData("frontRight", "%.2f", frontRight);
-            telemetry.addData("backLeft",  "%.2f", backLeft);
-            telemetry.addData("backRight", "%.2f", backRight);
+                robot.StringMotor.setPower(string);
+
+            else if (gamepad2.left_stick_y < 0)
+
+                robot.StringMotor.setPower(string);
+
+            else if (gamepad2.y)
+
+                robot.StringMotor.setPower(0);
+
+
+
+            if(gamepad2.right_stick_y > 0)
+
+                robot.LiftMotor.setPower(lift);
+
+            else if (gamepad2.right_stick_y < 0)
+
+                robot.LiftMotor.setPower(lift);
+
+            else if (gamepad2.x)
+
+                robot.LiftMotor.setPower(0);
+
+            lift = Range.clip(lift, -0.1, 0.1);
+            string = Range.clip(string, -0.1, 0.1);
+
+            //Use gamepad A and B to open and close armSN
+            if(gamepad2.a)
+                armTTPosition -= ARMTT_SPEED;
+            else if (gamepad2.b)
+                armTTPosition += ARMTT_SPEED;
+
+            telemetry.addData("left",  "%.2f", left);
+            telemetry.addData("right", "%.2f", right);
+            telemetry.addData("lift",  "%.2f", lift);
+            telemetry.addData("string",  "%.2f", string);
+            telemetry.addData("armTT",   "%.2f", armTTPosition);
             telemetry.update();
+
+           armTTPosition  = Range.clip(armTTPosition, 0.51, 1.00);
+            robot.armTT.setPosition(armTTPosition);
         }
     }
 }

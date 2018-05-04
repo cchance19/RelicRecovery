@@ -32,7 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This is NOT an opmode.
@@ -45,46 +44,54 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *
  */
 
-public class Hardware2858
+public class TurnerHardware2858
 {
     // Public OpMode members.
 
+    //Arm
+    public Servo armTT              = null;
+    public final static double ARMTT_HOME = 1.00;
+
     //Mecanum Wheels
-    public DcMotor  frontLeftDrive   = null;
-    public DcMotor  frontRightDrive  = null;
-    public DcMotor  backLeftDrive   = null;
-    public DcMotor  backRightDrive  = null;
+    public DcMotor  LeftDrive  = null;
+    public DcMotor  RightDrive = null;
+    public DcMotor  LiftMotor   = null;
+    public DcMotor  StringMotor  = null;
 
     /* Local OpMode members. */
-    HardwareMap hwMap  = null;
+    HardwareMap ThwMap  = null;
 
     /* Constructor */
-    public Hardware2858() {
+    public TurnerHardware2858() {
     }
 
-    /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap) {
+    // Initialize standard Hardware interfaces
+    public void init(HardwareMap TahwMap) {
         // save reference to HW Map
-        hwMap = ahwMap;
+        ThwMap = TahwMap;
 
         // Define and Initialize Mecanum Motors
-        frontLeftDrive  = hwMap.get(DcMotor.class, "front_left_drive");
-        frontRightDrive = hwMap.get(DcMotor.class, "front_right_drive");
-        backLeftDrive  = hwMap.get(DcMotor.class, "back_left_drive");
-        backRightDrive = hwMap.get(DcMotor.class, "back_right_drive");
-        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
-        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        LeftDrive  = ThwMap.get(DcMotor.class, "left_drive");
+        RightDrive = ThwMap.get(DcMotor.class, "right_drive");
+        LiftMotor  = ThwMap.get(DcMotor.class, "back_left_drive");
+        StringMotor = ThwMap.get(DcMotor.class, "string_motor");
+        RightDrive.setDirection(DcMotor.Direction.REVERSE);
+        StringMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all mecanum motors to zero power
-        frontLeftDrive.setPower(0);
-        frontRightDrive.setPower(0);
-        backLeftDrive.setPower(0);
-        backRightDrive.setPower(0);
+        LeftDrive.setPower(0);
+        RightDrive.setPower(0);
+        LiftMotor.setPower(0);
+        StringMotor.setPower(0);
 
         // Set all mecanum motors to run without encoders.
-        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        StringMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        //Define and initialize all installed servos.
+        armTT = ThwMap.get(Servo.class, "armTT");
+        armTT.setPosition(1.00);
     }
 }
