@@ -85,108 +85,82 @@ public class DriverControl2858 extends LinearOpMode {
             robot.rightDriveOUT.setPower(-right);
             robot.rightDriveIN.setPower(-right);
 
-            
-            if (robot.sweeperDrive.getCurrentPosition() > -2416.53846) {
-                if (gamepad2.right_trigger > gamepad2.left_trigger) {
-                    robot.sweeperDrive.setPower(sweeperOut);
-                }
-                else if (gamepad2.right_trigger < gamepad2.left_trigger) {
-                    robot.sweeperDrive.setPower(sweeperIn);
-                }
-                else if (gamepad2.right_trigger == gamepad2.left_trigger) {
+            if (gamepad2.right_trigger > gamepad2.left_trigger) {
+                robot.sweeperDrive.setPower(-sweeperOut*0.1);
+            }
+            else if (gamepad2.right_trigger < gamepad2.left_trigger) {
+                robot.sweeperDrive.setPower(sweeperIn*0.1);
+            }
+            else if (gamepad2.right_trigger == gamepad2.left_trigger) {
                     robot.sweeperDrive.setPower(0);
-                }
-            }
-            else if (robot.sweeperDrive.getCurrentPosition() <= -2416.53846) {
-                robot.sweeperDrive.setPower(0);
-
-                robot.sweeperDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                robot.sweeperDrive.setTargetPosition(100);
-
-                robot.sweeperDrive.setPower(1);
-
-                while (opModeIsActive() && robot.sweeperDrive.isBusy())
-                {
-                    telemetry.addData("encoder-fwd", robot.sweeperDrive.getCurrentPosition() + "  busy=" + robot.sweeperDrive.isBusy());
-                    telemetry.update();
-                    idle();
-                }
-
-                robot.sweeperDrive.setPower(0.0);
-
-                robot.sweeperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
 
-
-            if (robot.liftDriveLeft.getCurrentPosition() > -9100 && robot.liftDriveRight.getCurrentPosition() > -9100) {
-                if (gamepad1.right_trigger > gamepad1.left_trigger) {
-                    robot.liftDriveLeft.setPower(liftUp);
-                    robot.liftDriveRight.setPower(liftUp);
-                }
-                else if (gamepad1.right_trigger < gamepad1.left_trigger) {
-                    robot.liftDriveLeft.setPower(-liftDown);
-                    robot.liftDriveRight.setPower(-liftDown);
-                }
-                else if (gamepad1.right_trigger == gamepad1.left_trigger) {
+                if (robot.liftDriveLeft.getCurrentPosition() > -9100 && robot.liftDriveRight.getCurrentPosition() > -9100) {
+                    if (gamepad1.right_trigger > gamepad1.left_trigger) {
+                        robot.liftDriveLeft.setPower(liftUp);
+                        robot.liftDriveRight.setPower(liftUp);
+                    } else if (gamepad1.right_trigger < gamepad1.left_trigger) {
+                        robot.liftDriveLeft.setPower(-liftDown);
+                        robot.liftDriveRight.setPower(-liftDown);
+                    } else if (gamepad1.right_trigger == gamepad1.left_trigger) {
+                        robot.liftDriveLeft.setPower(0);
+                        robot.liftDriveRight.setPower(0);
+                    }
+                } else if (robot.liftDriveLeft.getCurrentPosition() <= -9100 && robot.liftDriveRight.getCurrentPosition() <= -9100) {
                     robot.liftDriveLeft.setPower(0);
                     robot.liftDriveRight.setPower(0);
+
+                    robot.liftDriveLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.liftDriveRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    robot.liftDriveLeft.setTargetPosition(1000);
+                    robot.liftDriveRight.setTargetPosition(1000);
+
+                    robot.liftDriveLeft.setPower(1);
+                    robot.liftDriveRight.setPower(1);
+
+                    while (opModeIsActive() && robot.liftDriveLeft.isBusy() && robot.liftDriveRight.isBusy()) {
+                        telemetry.addData("encoder-fwd", robot.liftDriveLeft.getCurrentPosition() + "  busy=" + robot.liftDriveLeft.isBusy());
+                        telemetry.addData("encoder-fwd", robot.liftDriveRight.getCurrentPosition() + "  busy=" + robot.liftDriveRight.isBusy());
+                        telemetry.update();
+                        idle();
+                    }
+
+                    robot.liftDriveLeft.setPower(0.0);
+                    robot.liftDriveRight.setPower(0.0);
+
+                    robot.liftDriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robot.liftDriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 }
-            }
-            else if (robot.liftDriveLeft.getCurrentPosition() <= -9100 && robot.liftDriveRight.getCurrentPosition() <= -9100) {
-                robot.liftDriveLeft.setPower(0);
-                robot.liftDriveRight.setPower(0);
-
-                robot.liftDriveLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robot.liftDriveRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                robot.liftDriveLeft.setTargetPosition(1000);
-                robot.liftDriveRight.setTargetPosition(1000);
-
-                robot.liftDriveLeft.setPower(1);
-                robot.liftDriveRight.setPower(1);
-
-                while (opModeIsActive() && robot.liftDriveLeft.isBusy() && robot.liftDriveRight.isBusy())
-                {
-                    telemetry.addData("encoder-fwd", robot.liftDriveLeft.getCurrentPosition() + "  busy=" + robot.liftDriveLeft.isBusy());
-                    telemetry.addData("encoder-fwd", robot.liftDriveRight.getCurrentPosition() + "  busy=" + robot.liftDriveRight.isBusy());
-                    telemetry.update();
-                    idle();
-                }
-
-                robot.liftDriveLeft.setPower(0.0);
-                robot.liftDriveRight.setPower(0.0);
-
-                robot.liftDriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robot.liftDriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            }
 
                 // Send telemetry message to indicate successful Encoder reset
-            telemetry.addData("Path0", "Starting at %7d :%7d",
-                    robot.liftDriveLeft.getCurrentPosition(),
-                    robot.liftDriveRight.getCurrentPosition());
-            telemetry.update();
+                telemetry.addData("Path0", "Starting at %7d :%7d",
+                        robot.liftDriveLeft.getCurrentPosition(),
+                        robot.liftDriveRight.getCurrentPosition());
+                telemetry.update();
 
-            teamMarkerPosition = Range.clip(teamMarkerPosition, robot.TEAMMARKER_MIN_RANGE, robot.TEAMMARKER_MAX_RANGE);
-            robot.teamMarker.setPosition(teamMarkerPosition);
+                teamMarkerPosition = Range.clip(teamMarkerPosition, robot.TEAMMARKER_MIN_RANGE, robot.TEAMMARKER_MAX_RANGE);
+                robot.teamMarker.setPosition(teamMarkerPosition);
 
-            if(gamepad2.a)
-                sweeperServoPosition = robot.SWEEPERSERVO_MIN_RANGE;
-            else if (gamepad2.b)
-                sweeperServoPosition = robot.SWEEPERSERVO_MAX_RANGE;
+                if (gamepad2.a)
+                    sweeperServoPosition = robot.SWEEPERSERVO_MIN_RANGE;
+                else if (gamepad2.b)
+                    sweeperServoPosition = robot.SWEEPERSERVO_MAX_RANGE;
+                else if (gamepad2.y)
+                    sweeperServoPosition = robot.SWEEPERSERVO_HOME;
 
-            sweeperServoPosition = Range.clip(sweeperServoPosition, robot.SWEEPERSERVO_MIN_RANGE, robot.SWEEPERSERVO_MAX_RANGE);
-            robot.sweeperServo.setPosition(sweeperServoPosition);
 
-            // Send telemetry message to signify robot running;
-            telemetry.addData("left", "%.2f", left);
-            telemetry.addData("right", "%.2f", right);
-            telemetry.addData("liftUp", "%.2f", liftUp);
-            telemetry.addData("liftDown", "%.2f", liftDown);
-           // telemetry.addData("sweeperOut", "%.2f", sweeperOut);
-          //  telemetry.addData("sweeperIn", "%.2f", sweeperIn);
-          //  telemetry.addData("sweeper", "%.2f", sweeper);
-            telemetry.update();
+                sweeperServoPosition = Range.clip(sweeperServoPosition, robot.SWEEPERSERVO_MIN_RANGE, robot.SWEEPERSERVO_MAX_RANGE);
+                robot.sweeperServo.setPosition(sweeperServoPosition);
+
+                // Send telemetry message to signify robot running;
+                telemetry.addData("left", "%.2f", left);
+                telemetry.addData("right", "%.2f", right);
+                telemetry.addData("liftUp", "%.2f", liftUp);
+                telemetry.addData("liftDown", "%.2f", liftDown);
+                telemetry.addData("sweeperOut", "%.2f", sweeperOut);
+                telemetry.addData("sweeperIn", "%.2f", sweeperIn);
+                telemetry.update();
             }
         }
     }
