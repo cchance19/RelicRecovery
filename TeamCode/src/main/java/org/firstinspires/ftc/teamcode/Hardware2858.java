@@ -59,7 +59,7 @@ public class Hardware2858
     public Servo    sweeperServo    = null;
 
     public final static double TEAMMARKER_HOME = 0;
-    public final static double TEAMMARKER_MIN_RANGE = 0.3;
+    public final static double TEAMMARKER_MIN_RANGE = -1.0;
     public final static double TEAMMARKER_MAX_RANGE = 1.0;
     public final static double SWEEPERSERVO_HOME = 0.5;
     public final static double SWEEPERSERVO_MIN_RANGE = 0;

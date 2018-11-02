@@ -86,16 +86,16 @@ public class DriverControl2858 extends LinearOpMode {
             robot.rightDriveIN.setPower(-right);
 
             if (gamepad2.right_trigger > gamepad2.left_trigger) {
-                robot.sweeperDrive.setPower(-sweeperOut*0.1);
+                robot.sweeperDrive.setPower(-sweeperOut*0.7);
             }
             else if (gamepad2.right_trigger < gamepad2.left_trigger) {
-                robot.sweeperDrive.setPower(sweeperIn*0.1);
+                robot.sweeperDrive.setPower(sweeperIn*0.7);
             }
             else if (gamepad2.right_trigger == gamepad2.left_trigger) {
                     robot.sweeperDrive.setPower(0);
             }
 
-                if (robot.liftDriveLeft.getCurrentPosition() > -9100 && robot.liftDriveRight.getCurrentPosition() > -9100) {
+                if (robot.liftDriveLeft.getCurrentPosition() > -6100 && robot.liftDriveRight.getCurrentPosition() > -6100) {
                     if (gamepad1.right_trigger > gamepad1.left_trigger) {
                         robot.liftDriveLeft.setPower(liftUp);
                         robot.liftDriveRight.setPower(liftUp);
@@ -106,31 +106,9 @@ public class DriverControl2858 extends LinearOpMode {
                         robot.liftDriveLeft.setPower(0);
                         robot.liftDriveRight.setPower(0);
                     }
-                } else if (robot.liftDriveLeft.getCurrentPosition() <= -9100 && robot.liftDriveRight.getCurrentPosition() <= -9100) {
+                } else if (robot.liftDriveLeft.getCurrentPosition() <= -6100 && robot.liftDriveRight.getCurrentPosition() <= -6100) {
                     robot.liftDriveLeft.setPower(0);
                     robot.liftDriveRight.setPower(0);
-
-                    robot.liftDriveLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.liftDriveRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                    robot.liftDriveLeft.setTargetPosition(1000);
-                    robot.liftDriveRight.setTargetPosition(1000);
-
-                    robot.liftDriveLeft.setPower(1);
-                    robot.liftDriveRight.setPower(1);
-
-                    while (opModeIsActive() && robot.liftDriveLeft.isBusy() && robot.liftDriveRight.isBusy()) {
-                        telemetry.addData("encoder-fwd", robot.liftDriveLeft.getCurrentPosition() + "  busy=" + robot.liftDriveLeft.isBusy());
-                        telemetry.addData("encoder-fwd", robot.liftDriveRight.getCurrentPosition() + "  busy=" + robot.liftDriveRight.isBusy());
-                        telemetry.update();
-                        idle();
-                    }
-
-                    robot.liftDriveLeft.setPower(0.0);
-                    robot.liftDriveRight.setPower(0.0);
-
-                    robot.liftDriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    robot.liftDriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 }
 
                 // Send telemetry message to indicate successful Encoder reset

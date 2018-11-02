@@ -159,7 +159,7 @@ public class Autonomous2858Crater extends LinearOpMode {
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
-        robot.teamMarker.setPosition(0.0);
+        robot.teamMarker.setPosition(-1.0);
 
         /*
         if (detector.getScreenPosition().x > 100 && detector.getScreenPosition().x < 400) {
@@ -214,7 +214,7 @@ public class Autonomous2858Crater extends LinearOpMode {
         */
      //   sweeperEncoderDrive(LIFT_SPEED, 1,4.00);
 
-        liftEncoderDrive(LIFT_SPEED, 6,6,  4.00);
+        liftEncoderDrive(LIFT_SPEED, 4,4,  4.00);
         encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
         encoderDrive(TURN_SPEED, 2.5, -2.5, 4.00);
         encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
@@ -262,7 +262,6 @@ public class Autonomous2858Crater extends LinearOpMode {
         robot.teamMarker.setPosition(1.0);
 
         encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-        encoderDrive(SLOW_SPEED, 5,5,4.00);
         encoderDrive(DRIVE_SPEED, -2,-1,4.00);
         encoderDrive(LIFT_SPEED, -75, -75, 4.00);
         encoderDrive(TURN_SPEED, -3, 3, 4.00);
