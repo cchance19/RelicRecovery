@@ -214,7 +214,7 @@ public class Autonomous2858Crater extends LinearOpMode {
         */
      //   sweeperEncoderDrive(LIFT_SPEED, 1,4.00);
 
-        liftEncoderDrive(LIFT_SPEED, 4,4,  4.00);
+        liftEncoderDrive(LIFT_SPEED, 4.25,4.25,  4.00);
         encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
         encoderDrive(TURN_SPEED, 2.5, -2.5, 4.00);
         encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
