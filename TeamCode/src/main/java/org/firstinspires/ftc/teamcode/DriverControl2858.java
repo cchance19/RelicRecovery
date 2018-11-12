@@ -86,10 +86,10 @@ public class DriverControl2858 extends LinearOpMode {
             robot.rightDriveIN.setPower(-right);
 
             if (gamepad2.right_trigger > gamepad2.left_trigger) {
-                robot.sweeperDrive.setPower(-sweeperOut*0.7);
+                robot.sweeperDrive.setPower(-sweeperOut);
             }
             else if (gamepad2.right_trigger < gamepad2.left_trigger) {
-                robot.sweeperDrive.setPower(sweeperIn*0.7);
+                robot.sweeperDrive.setPower(sweeperIn);
             }
             else if (gamepad2.right_trigger == gamepad2.left_trigger) {
                     robot.sweeperDrive.setPower(0);
