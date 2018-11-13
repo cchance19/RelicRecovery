@@ -77,6 +77,8 @@ public class DriverControl2858 extends LinearOpMode {
             double sweeperOut = gamepad2.right_trigger;
             double sweeperIn = gamepad2.left_trigger;
 
+            robot.teamMarker.setPosition(0.0);
+
             // Run wheels in tank mode
             left = gamepad1.left_stick_y;
             right = gamepad1.right_stick_y;
@@ -86,16 +88,16 @@ public class DriverControl2858 extends LinearOpMode {
             robot.rightDriveIN.setPower(-right);
 
             if (gamepad2.right_trigger > gamepad2.left_trigger) {
-                robot.sweeperDrive.setPower(-sweeperOut*0.7);
+                robot.sweeperDrive.setPower(-sweeperOut);
             }
             else if (gamepad2.right_trigger < gamepad2.left_trigger) {
-                robot.sweeperDrive.setPower(sweeperIn*0.7);
+                robot.sweeperDrive.setPower(sweeperIn);
             }
             else if (gamepad2.right_trigger == gamepad2.left_trigger) {
                     robot.sweeperDrive.setPower(0);
             }
 
-                if (robot.liftDriveLeft.getCurrentPosition() > -6100 && robot.liftDriveRight.getCurrentPosition() > -6100) {
+                if (robot.liftDriveLeft.getCurrentPosition() > -6400 && robot.liftDriveRight.getCurrentPosition() > -6400) {
                     if (gamepad1.right_trigger > gamepad1.left_trigger) {
                         robot.liftDriveLeft.setPower(liftUp);
                         robot.liftDriveRight.setPower(liftUp);
@@ -106,7 +108,7 @@ public class DriverControl2858 extends LinearOpMode {
                         robot.liftDriveLeft.setPower(0);
                         robot.liftDriveRight.setPower(0);
                     }
-                } else if (robot.liftDriveLeft.getCurrentPosition() <= -6100 && robot.liftDriveRight.getCurrentPosition() <= -6100) {
+                } else if (robot.liftDriveLeft.getCurrentPosition() <= -6400 && robot.liftDriveRight.getCurrentPosition() <= -6400) {
                     robot.liftDriveLeft.setPower(0);
                     robot.liftDriveRight.setPower(0);
                 }

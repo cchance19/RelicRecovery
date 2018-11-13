@@ -214,11 +214,11 @@ public class Autonomous2858Crater extends LinearOpMode {
         */
      //   sweeperEncoderDrive(LIFT_SPEED, 1,4.00);
 
-        liftEncoderDrive(LIFT_SPEED, 4,4,  4.00);
+        liftEncoderDrive(LIFT_SPEED, 4.25,4.25,  4.00);
         encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
-        encoderDrive(TURN_SPEED, 2.5, -2.5, 4.00);
+        encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
         encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
-        encoderDrive(TURN_SPEED, -2.5, 2.5, 4.00);
+        encoderDrive(TURN_SPEED, -2.25, 2.25, 4.00);
         encoderDrive(DRIVE_SPEED, -5.25, -5.25, 4.00);
 
         sleep(1000);
@@ -227,7 +227,7 @@ public class Autonomous2858Crater extends LinearOpMode {
             encoderDrive(DRIVE_SPEED, -19, -19, 4.00);
             encoderDrive(DRIVE_SPEED, 16, 16, 4.00);
             encoderDrive(DRIVE_SPEED, -8, -8, 4.00);
-            encoderDrive(TURN_SPEED, 11.75, -11.75, 4.00);
+            encoderDrive(TURN_SPEED, 11.65, -11.65, 4.00);
             encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
             encoderDrive(DRIVE_SPEED, -1.5,-1.5,4.00);
             encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
@@ -241,7 +241,7 @@ public class Autonomous2858Crater extends LinearOpMode {
                 encoderDrive(DRIVE_SPEED, -27, -27, 4.00);
                 encoderDrive(DRIVE_SPEED, 17, 17, 4.00);
                 encoderDrive(TURN_SPEED, -5.5, 5.5, 4.00);
-                encoderDrive(TURN_SPEED, 12.05, -12.05, 4.00);
+                encoderDrive(TURN_SPEED, 11.95, -11.95, 4.00);
                 encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
                 encoderDrive(DRIVE_SPEED, -1.5, -1.5, 4.00);
                 encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
