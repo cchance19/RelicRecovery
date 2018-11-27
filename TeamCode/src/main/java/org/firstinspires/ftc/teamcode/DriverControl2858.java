@@ -44,7 +44,8 @@ public class DriverControl2858 extends LinearOpMode {
     Hardware2858 robot = new Hardware2858();// Use a K9's hardware
 
     double teamMarkerPosition = robot.TEAMMARKER_HOME;                   // Servo safe position
-    double sweeperServoPosition = robot.SWEEPERSERVO_HOME;
+    double sweeperServoLPosition = robot.SWEEPERSERVO_HOME;
+    double sweeperServoRPosition = robot.SWEEPERSERVO_HOME;
 
     @Override
     public void runOpMode() {
@@ -53,12 +54,10 @@ public class DriverControl2858 extends LinearOpMode {
         robot.init(hardwareMap);
 
         // reset encoder count kept by left motor.
-        robot.liftDriveLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.liftDriveRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.liftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // set left motor to run to target encoder position and stop with brakes on.
-        robot.liftDriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.liftDriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.liftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Say", "Hello Driver");    //
@@ -76,6 +75,7 @@ public class DriverControl2858 extends LinearOpMode {
             double liftDown = gamepad1.left_trigger;
             double sweeperOut = gamepad2.right_trigger;
             double sweeperIn = gamepad2.left_trigger;
+            //double gripper = gamepad2.right_stick_y;
 
             robot.teamMarker.setPosition(0.0);
 
@@ -86,6 +86,7 @@ public class DriverControl2858 extends LinearOpMode {
             robot.leftDriveIN.setPower(-left);
             robot.rightDriveOUT.setPower(-right);
             robot.rightDriveIN.setPower(-right);
+            //robot.gripperDrive.setPower(gripper);
 
             if (gamepad2.right_trigger > gamepad2.left_trigger) {
                 robot.sweeperDrive.setPower(-sweeperOut);
@@ -97,7 +98,59 @@ public class DriverControl2858 extends LinearOpMode {
                     robot.sweeperDrive.setPower(0);
             }
 
-                if (robot.liftDriveLeft.getCurrentPosition() > -6400 && robot.liftDriveRight.getCurrentPosition() > -6400) {
+
+            if (robot.liftDrive.getCurrentPosition() > -6400) {
+                if (gamepad1.right_trigger > gamepad1.left_trigger) {
+                    robot.liftDrive.setPower(liftUp);
+                } else if (gamepad1.right_trigger < gamepad1.left_trigger) {
+                    robot.liftDrive.setPower(-liftDown);
+                } else if (gamepad1.right_trigger == gamepad1.left_trigger) {
+                    robot.liftDrive.setPower(0);
+                }
+            } else if (robot.liftDrive.getCurrentPosition() <= -6400) {
+                robot.liftDrive.setPower(0);
+            }
+
+            // Send telemetry message to indicate successful Encoder reset
+            telemetry.addData("Path0", "Starting at %7d :",
+                    robot.liftDrive.getCurrentPosition());
+            telemetry.update();
+
+                teamMarkerPosition = Range.clip(teamMarkerPosition, robot.TEAMMARKER_MIN_RANGE, robot.TEAMMARKER_MAX_RANGE);
+                robot.teamMarker.setPosition(teamMarkerPosition);
+
+                if (gamepad2.a) {
+                    sweeperServoLPosition = robot.SWEEPERSERVOL_MIN_RANGE;
+                    sweeperServoRPosition = robot.SWEEPERSERVOR_MIN_RANGE;
+                }
+                else if (gamepad2.b) {
+                    sweeperServoLPosition = robot.SWEEPERSERVOL_MAX_RANGE;
+                    sweeperServoRPosition = robot.SWEEPERSERVOR_MAX_RANGE;
+                }
+
+
+                sweeperServoLPosition = Range.clip(sweeperServoLPosition, robot.SWEEPERSERVOL_MIN_RANGE, robot.SWEEPERSERVOL_MAX_RANGE);
+                sweeperServoRPosition = Range.clip(sweeperServoRPosition, robot.SWEEPERSERVOR_MIN_RANGE, robot.SWEEPERSERVOR_MAX_RANGE);
+                robot.sweeperServoR.setPosition(sweeperServoLPosition);
+                robot.sweeperServoL.setPosition(sweeperServoRPosition);
+
+                // Send telemetry message to signify robot running;
+                telemetry.addData("left", "%.2f", left);
+                telemetry.addData("right", "%.2f", right);
+                telemetry.addData("liftUp", "%.2f", liftUp);
+                telemetry.addData("liftDown", "%.2f", liftDown);
+                telemetry.addData("sweeperOut", "%.2f", sweeperOut);
+                telemetry.addData("sweeperIn", "%.2f", sweeperIn);
+                //telemetry.addData("gripper", "%.2f", gripper);
+                telemetry.update();
+            }
+        }
+    }
+
+
+
+
+    /*                if (robot.liftDriveLeft.getCurrentPosition() > -6400 && robot.liftDriveRight.getCurrentPosition() > -6400) {
                     if (gamepad1.right_trigger > gamepad1.left_trigger) {
                         robot.liftDriveLeft.setPower(liftUp);
                         robot.liftDriveRight.setPower(liftUp);
@@ -118,29 +171,4 @@ public class DriverControl2858 extends LinearOpMode {
                         robot.liftDriveLeft.getCurrentPosition(),
                         robot.liftDriveRight.getCurrentPosition());
                 telemetry.update();
-
-                teamMarkerPosition = Range.clip(teamMarkerPosition, robot.TEAMMARKER_MIN_RANGE, robot.TEAMMARKER_MAX_RANGE);
-                robot.teamMarker.setPosition(teamMarkerPosition);
-
-                if (gamepad2.a)
-                    sweeperServoPosition = robot.SWEEPERSERVO_MIN_RANGE;
-                else if (gamepad2.b)
-                    sweeperServoPosition = robot.SWEEPERSERVO_MAX_RANGE;
-                else if (gamepad2.y)
-                    sweeperServoPosition = robot.SWEEPERSERVO_HOME;
-
-
-                sweeperServoPosition = Range.clip(sweeperServoPosition, robot.SWEEPERSERVO_MIN_RANGE, robot.SWEEPERSERVO_MAX_RANGE);
-                robot.sweeperServo.setPosition(sweeperServoPosition);
-
-                // Send telemetry message to signify robot running;
-                telemetry.addData("left", "%.2f", left);
-                telemetry.addData("right", "%.2f", right);
-                telemetry.addData("liftUp", "%.2f", liftUp);
-                telemetry.addData("liftDown", "%.2f", liftDown);
-                telemetry.addData("sweeperOut", "%.2f", sweeperOut);
-                telemetry.addData("sweeperIn", "%.2f", sweeperIn);
-                telemetry.update();
-            }
-        }
-    }
+    */

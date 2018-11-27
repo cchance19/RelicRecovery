@@ -32,14 +32,13 @@ package org.firstinspires.ftc.teamcode;
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
+import com.disnodeteam.dogecv.scoring.MaxAreaScorer;
+import com.disnodeteam.dogecv.scoring.PerfectAreaScorer;
+import com.disnodeteam.dogecv.scoring.RatioScorer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
@@ -63,8 +62,8 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 
-@Autonomous(name="Autonomous2858Crater", group="Autonomous")
-public class Autonomous2858Crater extends LinearOpMode {
+@Autonomous(name="Autonomous2858Depot", group="Autonomous")
+public class Autonomous2858Depot extends LinearOpMode {
 
     /* Declare OpMode members. */
     Hardware2858 robot = new Hardware2858();   // Use a Pushbot's hardware
@@ -177,7 +176,6 @@ public class Autonomous2858Crater extends LinearOpMode {
 
         robot.teamMarker.setPosition(-1.0);
 
-
         if (detector.getScreenPosition().x > 150 && detector.getScreenPosition().x < 450) {
             liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
             encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
@@ -188,18 +186,11 @@ public class Autonomous2858Crater extends LinearOpMode {
             encoderDrive(DRIVE_SPEED, -19, -19, 4.00);
             encoderDrive(DRIVE_SPEED, 16, 16, 4.00);
             encoderDrive(DRIVE_SPEED, -8, -8, 4.00);
-            encoderDrive(TURN_SPEED, 11.65, -11.65, 4.00);
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -1.5,-1.5,4.00);
-            encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
+            encoderDrive(TURN_SPEED, -20, 20, 4.00);
 
             robot.teamMarker.setPosition(1.0);
 
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -2,-1,4.00);
-            encoderDrive(LIFT_SPEED, -75, -75, 4.00);
-            encoderDrive(TURN_SPEED, -3, 3, 4.00);
-            encoderDrive(DRIVE_SPEED, -20,-20,4.00);
+            encoderDrive(DRIVE_SPEED, 10,10,4.00);
         }
         else if (detector.getScreenPosition().x < 150) {
             liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
@@ -210,20 +201,12 @@ public class Autonomous2858Crater extends LinearOpMode {
             encoderDrive(DRIVE_SPEED, -5.25, -5.25, 4.00);
             encoderDrive(DRIVE_SPEED, 5.5, -5.5, 4.00);
             encoderDrive(DRIVE_SPEED, -27, -27, 4.00);
-            encoderDrive(DRIVE_SPEED, 17, 17, 4.00);
             encoderDrive(TURN_SPEED, -5.5, 5.5, 4.00);
-            encoderDrive(TURN_SPEED, 11.95, -11.95, 4.00);
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -1.5, -1.5, 4.00);
-            encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
+            encoderDrive(TURN_SPEED, -20, 20, 4.00);
 
             robot.teamMarker.setPosition(1.0);
 
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -2,-1,4.00);
-            encoderDrive(LIFT_SPEED, -75, -75, 4.00);
-            encoderDrive(TURN_SPEED, -3, 3, 4.00);
-            encoderDrive(DRIVE_SPEED, -20,-20,4.00);
+            encoderDrive(DRIVE_SPEED, 10,10,4.00);
         }
         else if (detector.getScreenPosition().x > 450) {
             liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
@@ -234,27 +217,16 @@ public class Autonomous2858Crater extends LinearOpMode {
             encoderDrive(DRIVE_SPEED, -5.25, -5.25, 4.00);
             encoderDrive(TURN_SPEED, -9.5,9.5,4.00);
             encoderDrive(DRIVE_SPEED, -27,-27,4.00);
-            encoderDrive(TURN_SPEED, 3.5,-3.5,4.00);
+            encoderDrive(TURN_SPEED, -20, 20, 4.00);
             encoderDrive(TURN_SPEED, 12,-12,4.00);
-            encoderDrive(DRIVE_SPEED, 30,30,4.00);
-            encoderDrive(DRIVE_SPEED, -0.5,-0.5,4.00);
-            encoderDrive(TURN_SPEED, -3.5,3.5,4.00);
-            encoderDrive(DRIVE_SPEED, 5,5,4.00);
-            encoderDrive(TURN_SPEED, 0.5,-0.5,4.00);
 
             robot.teamMarker.setPosition(1.0);
 
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -2,-1,4.00);
-            encoderDrive(LIFT_SPEED, -75, -75, 4.00);
-            encoderDrive(TURN_SPEED, -3, 3, 4.00);
-            encoderDrive(DRIVE_SPEED, -20,-20,4.00);
+            encoderDrive(DRIVE_SPEED, 10,10,4.00);
         }
 
-
      //   sweeperEncoderDrive(LIFT_SPEED, 1,4.00);
-
-        /*
+/*
         liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
         encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
         encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
@@ -268,10 +240,7 @@ public class Autonomous2858Crater extends LinearOpMode {
             encoderDrive(DRIVE_SPEED, -19, -19, 4.00);
             encoderDrive(DRIVE_SPEED, 16, 16, 4.00);
             encoderDrive(DRIVE_SPEED, -8, -8, 4.00);
-            encoderDrive(TURN_SPEED, 11.65, -11.65, 4.00);
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -1.5,-1.5,4.00);
-            encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
+            encoderDrive(TURN_SPEED, -20, 20, 4.00);
         }
         else if (!detector.getAligned()) {
             encoderDrive(DRIVE_SPEED, 5.5, -5.5, 4.00);
@@ -280,34 +249,22 @@ public class Autonomous2858Crater extends LinearOpMode {
 
             if(detector.getAligned()) {
                 encoderDrive(DRIVE_SPEED, -27, -27, 4.00);
-                encoderDrive(DRIVE_SPEED, 17, 17, 4.00);
                 encoderDrive(TURN_SPEED, -5.5, 5.5, 4.00);
-                encoderDrive(TURN_SPEED, 11.95, -11.95, 4.00);
-                encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-                encoderDrive(DRIVE_SPEED, -1.5, -1.5, 4.00);
-                encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
+                encoderDrive(TURN_SPEED, -20, 20, 4.00);
             }
             else if (!detector.getAligned()) {
                 encoderDrive(TURN_SPEED, -9.5,9.5,4.00);
                 encoderDrive(DRIVE_SPEED, -27,-27,4.00);
-                encoderDrive(TURN_SPEED, 3.5,-3.5,4.00);
+                encoderDrive(TURN_SPEED, -20, 20, 4.00);
                 encoderDrive(TURN_SPEED, 12,-12,4.00);
-                encoderDrive(DRIVE_SPEED, 30,30,4.00);
-                encoderDrive(DRIVE_SPEED, -0.5,-0.5,4.00);
-                encoderDrive(TURN_SPEED, -3.5,3.5,4.00);
-                encoderDrive(DRIVE_SPEED, 5,5,4.00);
-                encoderDrive(TURN_SPEED, 0.5,-0.5,4.00);
             }
         }
 
         robot.teamMarker.setPosition(1.0);
 
-        encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-        encoderDrive(DRIVE_SPEED, -2,-1,4.00);
-        encoderDrive(LIFT_SPEED, -75, -75, 4.00);
-        encoderDrive(TURN_SPEED, -3, 3, 4.00);
-        encoderDrive(DRIVE_SPEED, -20,-20,4.00);
-        */
+        encoderDrive(DRIVE_SPEED, 10,10,4.00);
+
+*/
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

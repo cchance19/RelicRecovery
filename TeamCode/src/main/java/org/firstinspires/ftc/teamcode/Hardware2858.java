@@ -52,18 +52,21 @@ public class Hardware2858
     public DcMotor  leftDriveIN   = null;
     public DcMotor  rightDriveOUT  = null;
     public DcMotor  rightDriveIN  = null;
-    public DcMotor  liftDriveLeft       = null;
-    public DcMotor  liftDriveRight    = null;
+    public DcMotor  liftDrive       = null;
     public Servo    teamMarker      = null;
     public DcMotor  sweeperDrive    = null;
-    public Servo    sweeperServo    = null;
+    public Servo    sweeperServoL    = null;
+    public Servo    sweeperServoR    = null;
+    //public DcMotor  gripperDrive    = null;
 
     public final static double TEAMMARKER_HOME = 0;
     public final static double TEAMMARKER_MIN_RANGE = -1.0;
     public final static double TEAMMARKER_MAX_RANGE = 1.0;
     public final static double SWEEPERSERVO_HOME = 0.5;
-    public final static double SWEEPERSERVO_MIN_RANGE = 0;
-    public final static double SWEEPERSERVO_MAX_RANGE = 1;
+    public final static double SWEEPERSERVOL_MIN_RANGE = 0;
+    public final static double SWEEPERSERVOL_MAX_RANGE = 1;
+    public final static double SWEEPERSERVOR_MIN_RANGE = 0;
+    public final static double SWEEPERSERVOR_MAX_RANGE = 1;
 
 
     /* Local OpMode members. */
@@ -82,33 +85,33 @@ public class Hardware2858
         leftDriveIN  = hwMap.get(DcMotor.class, "left_drive_in");
         rightDriveOUT = hwMap.get(DcMotor.class, "right_drive_out");
         rightDriveIN = hwMap.get(DcMotor.class, "right_drive_in");
-        liftDriveLeft = hwMap.get(DcMotor.class, "lift_drive_left");
-        liftDriveRight = hwMap.get(DcMotor.class, "lift_drive_right");
+        liftDrive = hwMap.get(DcMotor.class, "lift_drive");
         sweeperDrive = hwMap.get(DcMotor.class, "sweeper_drive");
+        //gripperDrive = hwMap.get(DcMotor.class, "gripper_drive");
         leftDriveIN.setDirection(DcMotor.Direction.REVERSE);
         rightDriveOUT.setDirection(DcMotor.Direction.REVERSE);
-        liftDriveRight.setDirection(DcMotor.Direction.REVERSE);
 
-        // Set all mecanum motors to zero power
+        // Set all motors to zero power
         leftDriveOUT.setPower(0);
         leftDriveIN.setPower(0);
         rightDriveOUT.setPower(0);
         rightDriveIN.setPower(0);
-        liftDriveLeft.setPower(0);
-        liftDriveRight.setPower(0);
+        liftDrive.setPower(0);
         sweeperDrive.setPower(0);
+        //gripperDrive.setPower(0);
 
         // Set all mecanum motors to run using encoders.
         leftDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftDriveLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftDriveRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         sweeperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //gripperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         teamMarker  = hwMap.get(Servo.class, "team_Marker");
         teamMarker.setPosition(TEAMMARKER_HOME);
-        sweeperServo = hwMap.get(Servo.class, "sweeper_Servo");
+        sweeperServoL = hwMap.get(Servo.class, "sweeper_Servo_L");
+        sweeperServoR = hwMap.get(Servo.class, "sweeper_Servo_R");
     }
 }
