@@ -75,7 +75,7 @@ public class DriverControl2858 extends LinearOpMode {
             double liftDown = gamepad1.left_trigger;
             double sweeperOut = gamepad2.right_trigger;
             double sweeperIn = gamepad2.left_trigger;
-            //double gripper = gamepad2.right_stick_y;
+            double gripper = gamepad2.right_stick_y;
 
             robot.teamMarker.setPosition(0.0);
 
@@ -86,7 +86,7 @@ public class DriverControl2858 extends LinearOpMode {
             robot.leftDriveIN.setPower(-left);
             robot.rightDriveOUT.setPower(-right);
             robot.rightDriveIN.setPower(-right);
-            //robot.gripperDrive.setPower(gripper);
+            robot.gripperDrive.setPower(gripper);
 
             if (gamepad2.right_trigger > gamepad2.left_trigger) {
                 robot.sweeperDrive.setPower(-sweeperOut);
@@ -98,7 +98,17 @@ public class DriverControl2858 extends LinearOpMode {
                     robot.sweeperDrive.setPower(0);
             }
 
+            if (gamepad1.right_trigger > gamepad1.left_trigger) {
+                robot.liftDrive.setPower(liftUp);
+            } else if (gamepad1.right_trigger < gamepad1.left_trigger) {
+                robot.liftDrive.setPower(-liftDown);
+            } else if (gamepad1.right_trigger == gamepad1.left_trigger) {
+                robot.liftDrive.setPower(0);
+            }
 
+
+
+/*
             if (robot.liftDrive.getCurrentPosition() > -6400) {
                 if (gamepad1.right_trigger > gamepad1.left_trigger) {
                     robot.liftDrive.setPower(liftUp);
@@ -110,6 +120,7 @@ public class DriverControl2858 extends LinearOpMode {
             } else if (robot.liftDrive.getCurrentPosition() <= -6400) {
                 robot.liftDrive.setPower(0);
             }
+            */
 
             // Send telemetry message to indicate successful Encoder reset
             telemetry.addData("Path0", "Starting at %7d :",
@@ -141,7 +152,7 @@ public class DriverControl2858 extends LinearOpMode {
                 telemetry.addData("liftDown", "%.2f", liftDown);
                 telemetry.addData("sweeperOut", "%.2f", sweeperOut);
                 telemetry.addData("sweeperIn", "%.2f", sweeperIn);
-                //telemetry.addData("gripper", "%.2f", gripper);
+                telemetry.addData("gripper", "%.2f", gripper);
                 telemetry.update();
             }
         }

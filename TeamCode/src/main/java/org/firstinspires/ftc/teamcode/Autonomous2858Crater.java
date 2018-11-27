@@ -82,18 +82,19 @@ public class Autonomous2858Crater extends LinearOpMode {
     static final double SWEEPER_COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             3.1414;
 
-    static final double LIFT_COUNTS_PER_MOTOR_REV = 4833.07692307;    // eg: REV Motor Encoder
+    static final double LIFT_COUNTS_PER_MOTOR_REV = 4317.5487;    // eg: REV Motor Encoder
+    //static final double LIFT_COUNTS_PER_MOTOR_REV = 4833.07692307;    // eg: REV Motor Encoder
     //static final double LIFT_COUNTS_PER_MOTOR_REV = 4764.60834;    // eg: REV Motor Encoder
     //static final double LIFT_COUNTS_PER_MOTOR_REV = 6806.58333;    // eg: REV Motor Encoder
     static final double LIFT_COUNTS_PER_INCH = (LIFT_COUNTS_PER_MOTOR_REV) / (3.1415);
     static final double LIFT_SPEED = 1;
 
-    //public GoldAlignDetector detector;
-    public GoldMineralDetector detector;
+    public GoldAlignDetector detector;
+    //public GoldMineralDetector detector;
 
     @Override
     public void runOpMode() {
-
+/*
         detector = new GoldMineralDetector();
 
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
@@ -112,8 +113,8 @@ public class Autonomous2858Crater extends LinearOpMode {
         detector.enable();
 
         telemetry.addData("X Pos", detector.getScreenPosition().x); // Gold X pos.
+*/
 
-        /*
         detector = new GoldAlignDetector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
         detector.useDefaults();
@@ -134,7 +135,7 @@ public class Autonomous2858Crater extends LinearOpMode {
 
         telemetry.addData("X Pos", detector.getXPosition()); // Gold X pos.
         telemetry.addData("IsAligned", detector.getAligned()); // Is the bot aligned with the gold mineral
-        */
+
 
         /*
          * Initialize the drive system variables.
@@ -177,7 +178,7 @@ public class Autonomous2858Crater extends LinearOpMode {
 
         robot.teamMarker.setPosition(-1.0);
 
-
+/*
         if (detector.getScreenPosition().x > 150 && detector.getScreenPosition().x < 450) {
             liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
             encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
@@ -250,12 +251,12 @@ public class Autonomous2858Crater extends LinearOpMode {
             encoderDrive(TURN_SPEED, -3, 3, 4.00);
             encoderDrive(DRIVE_SPEED, -20,-20,4.00);
         }
-
+*/
 
      //   sweeperEncoderDrive(LIFT_SPEED, 1,4.00);
 
-        /*
-        liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
+
+        liftEncoderDrive(LIFT_SPEED, 4.875,  4.00);
         encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
         encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
         encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
@@ -268,7 +269,7 @@ public class Autonomous2858Crater extends LinearOpMode {
             encoderDrive(DRIVE_SPEED, -19, -19, 4.00);
             encoderDrive(DRIVE_SPEED, 16, 16, 4.00);
             encoderDrive(DRIVE_SPEED, -8, -8, 4.00);
-            encoderDrive(TURN_SPEED, 11.65, -11.65, 4.00);
+            encoderDrive(TURN_SPEED, 10.65, -10.65, 4.00);
             encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
             encoderDrive(DRIVE_SPEED, -1.5,-1.5,4.00);
             encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
@@ -282,7 +283,7 @@ public class Autonomous2858Crater extends LinearOpMode {
                 encoderDrive(DRIVE_SPEED, -27, -27, 4.00);
                 encoderDrive(DRIVE_SPEED, 17, 17, 4.00);
                 encoderDrive(TURN_SPEED, -5.5, 5.5, 4.00);
-                encoderDrive(TURN_SPEED, 11.95, -11.95, 4.00);
+                encoderDrive(TURN_SPEED, 10.95, -10.95, 4.00);
                 encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
                 encoderDrive(DRIVE_SPEED, -1.5, -1.5, 4.00);
                 encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
@@ -307,7 +308,7 @@ public class Autonomous2858Crater extends LinearOpMode {
         encoderDrive(LIFT_SPEED, -75, -75, 4.00);
         encoderDrive(TURN_SPEED, -3, 3, 4.00);
         encoderDrive(DRIVE_SPEED, -20,-20,4.00);
-        */
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

@@ -81,18 +81,19 @@ public class Autonomous2858Depot extends LinearOpMode {
     static final double SWEEPER_COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             3.1414;
 
-    static final double LIFT_COUNTS_PER_MOTOR_REV = 4833.07692307;    // eg: REV Motor Encoder
+    static final double LIFT_COUNTS_PER_MOTOR_REV = 4317.5487;    // eg: REV Motor Encoder
+    //static final double LIFT_COUNTS_PER_MOTOR_REV = 4833.07692307;    // eg: REV Motor Encoder
     //static final double LIFT_COUNTS_PER_MOTOR_REV = 4764.60834;    // eg: REV Motor Encoder
     //static final double LIFT_COUNTS_PER_MOTOR_REV = 6806.58333;    // eg: REV Motor Encoder
     static final double LIFT_COUNTS_PER_INCH = (LIFT_COUNTS_PER_MOTOR_REV) / (3.1415);
     static final double LIFT_SPEED = 1;
 
-    //public GoldAlignDetector detector;
-    public GoldMineralDetector detector;
+    public GoldAlignDetector detector;
+    //public GoldMineralDetector detector;
 
     @Override
     public void runOpMode() {
-
+/*
         detector = new GoldMineralDetector();
 
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
@@ -111,8 +112,8 @@ public class Autonomous2858Depot extends LinearOpMode {
         detector.enable();
 
         telemetry.addData("X Pos", detector.getScreenPosition().x); // Gold X pos.
+*/
 
-        /*
         detector = new GoldAlignDetector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
         detector.useDefaults();
@@ -133,7 +134,6 @@ public class Autonomous2858Depot extends LinearOpMode {
 
         telemetry.addData("X Pos", detector.getXPosition()); // Gold X pos.
         telemetry.addData("IsAligned", detector.getAligned()); // Is the bot aligned with the gold mineral
-        */
 
         /*
          * Initialize the drive system variables.
@@ -175,7 +175,7 @@ public class Autonomous2858Depot extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
         robot.teamMarker.setPosition(-1.0);
-
+/*
         if (detector.getScreenPosition().x > 150 && detector.getScreenPosition().x < 450) {
             liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
             encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
@@ -224,10 +224,11 @@ public class Autonomous2858Depot extends LinearOpMode {
 
             encoderDrive(DRIVE_SPEED, 10,10,4.00);
         }
+        */
 
      //   sweeperEncoderDrive(LIFT_SPEED, 1,4.00);
-/*
-        liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
+
+        liftEncoderDrive(LIFT_SPEED, 4.875,  4.00);
         encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
         encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
         encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
@@ -264,7 +265,7 @@ public class Autonomous2858Depot extends LinearOpMode {
 
         encoderDrive(DRIVE_SPEED, 10,10,4.00);
 
-*/
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

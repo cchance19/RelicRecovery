@@ -57,7 +57,7 @@ public class Hardware2858
     public DcMotor  sweeperDrive    = null;
     public Servo    sweeperServoL    = null;
     public Servo    sweeperServoR    = null;
-    //public DcMotor  gripperDrive    = null;
+    public DcMotor  gripperDrive    = null;
 
     public final static double TEAMMARKER_HOME = 0;
     public final static double TEAMMARKER_MIN_RANGE = -1.0;
@@ -87,7 +87,7 @@ public class Hardware2858
         rightDriveIN = hwMap.get(DcMotor.class, "right_drive_in");
         liftDrive = hwMap.get(DcMotor.class, "lift_drive");
         sweeperDrive = hwMap.get(DcMotor.class, "sweeper_drive");
-        //gripperDrive = hwMap.get(DcMotor.class, "gripper_drive");
+        gripperDrive = hwMap.get(DcMotor.class, "gripper_drive");
         leftDriveIN.setDirection(DcMotor.Direction.REVERSE);
         rightDriveOUT.setDirection(DcMotor.Direction.REVERSE);
 
@@ -98,7 +98,7 @@ public class Hardware2858
         rightDriveIN.setPower(0);
         liftDrive.setPower(0);
         sweeperDrive.setPower(0);
-        //gripperDrive.setPower(0);
+        gripperDrive.setPower(0);
 
         // Set all mecanum motors to run using encoders.
         leftDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -107,7 +107,7 @@ public class Hardware2858
         rightDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         sweeperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //gripperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        gripperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         teamMarker  = hwMap.get(Servo.class, "team_Marker");
         teamMarker.setPosition(TEAMMARKER_HOME);
