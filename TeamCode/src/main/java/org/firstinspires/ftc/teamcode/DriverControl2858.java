@@ -113,7 +113,7 @@ public class DriverControl2858 extends LinearOpMode {
 
             // Send telemetry message to indicate successful Encoder reset
             telemetry.addData("Path0", "Starting at %7d :",
-                    robot.liftDrive.getCurrentPosition();
+                    robot.liftDrive.getCurrentPosition());
             telemetry.update();
 
                 teamMarkerPosition = Range.clip(teamMarkerPosition, robot.TEAMMARKER_MIN_RANGE, robot.TEAMMARKER_MAX_RANGE);
