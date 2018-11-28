@@ -44,8 +44,8 @@ public class DriverControl2858 extends LinearOpMode {
     Hardware2858 robot = new Hardware2858();// Use a K9's hardware
 
     double teamMarkerPosition = robot.TEAMMARKER_HOME;                   // Servo safe position
-    double sweeperServoLPosition = robot.SWEEPERSERVO_HOME;
-    double sweeperServoRPosition = robot.SWEEPERSERVO_HOME;
+    double sweeperServoLPosition = robot.SWEEPERSERVOL_HOME;
+    double sweeperServoRPosition = robot.SWEEPERSERVOR_HOME;
 
     @Override
     public void runOpMode() {
@@ -131,19 +131,31 @@ public class DriverControl2858 extends LinearOpMode {
                 robot.teamMarker.setPosition(teamMarkerPosition);
 
                 if (gamepad2.a) {
-                    sweeperServoLPosition = robot.SWEEPERSERVOL_MIN_RANGE;
-                    sweeperServoRPosition = robot.SWEEPERSERVOR_MIN_RANGE;
+                    //sweeperServoLPosition = robot.SWEEPERSERVOL_MIN_RANGE;
+                    //sweeperServoRPosition = robot.SWEEPERSERVOR_MAX_RANGE;
+                    robot.sweeperServoL.setPosition(0);
                 }
                 else if (gamepad2.b) {
-                    sweeperServoLPosition = robot.SWEEPERSERVOL_MAX_RANGE;
-                    sweeperServoRPosition = robot.SWEEPERSERVOR_MAX_RANGE;
+                    //sweeperServoLPosition = robot.SWEEPERSERVOL_MAX_RANGE;
+                    //sweeperServoRPosition = robot.SWEEPERSERVOR_MIN_RANGE;
+                    robot.sweeperServoL.setPosition(-0.9);
                 }
 
+                if (gamepad2.a) {
+                //sweeperServoLPosition = robot.SWEEPERSERVOL_MIN_RANGE;
+                //sweeperServoRPosition = robot.SWEEPERSERVOR_MAX_RANGE;
+                    robot.sweeperServoR.setPosition(0);
+                }
+                else if (gamepad2.b) {
+                //sweeperServoLPosition = robot.SWEEPERSERVOL_MAX_RANGE;
+                //sweeperServoRPosition = robot.SWEEPERSERVOR_MIN_RANGE;
+                    robot.sweeperServoR.setPosition(0.9);
+                }
 
                 sweeperServoLPosition = Range.clip(sweeperServoLPosition, robot.SWEEPERSERVOL_MIN_RANGE, robot.SWEEPERSERVOL_MAX_RANGE);
                 sweeperServoRPosition = Range.clip(sweeperServoRPosition, robot.SWEEPERSERVOR_MIN_RANGE, robot.SWEEPERSERVOR_MAX_RANGE);
-                robot.sweeperServoR.setPosition(sweeperServoLPosition);
-                robot.sweeperServoL.setPosition(sweeperServoRPosition);
+                robot.sweeperServoL.setPosition(sweeperServoLPosition);
+                robot.sweeperServoR.setPosition(sweeperServoRPosition);
 
                 // Send telemetry message to signify robot running;
                 telemetry.addData("left", "%.2f", left);

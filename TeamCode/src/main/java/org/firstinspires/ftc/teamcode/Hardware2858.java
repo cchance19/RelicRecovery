@@ -62,11 +62,12 @@ public class Hardware2858
     public final static double TEAMMARKER_HOME = 0;
     public final static double TEAMMARKER_MIN_RANGE = -1.0;
     public final static double TEAMMARKER_MAX_RANGE = 1.0;
-    public final static double SWEEPERSERVO_HOME = 0.5;
+    public final static double SWEEPERSERVOL_HOME = -0.9;
+    public final static double SWEEPERSERVOR_HOME = 0.9;
     public final static double SWEEPERSERVOL_MIN_RANGE = 0;
-    public final static double SWEEPERSERVOL_MAX_RANGE = 1;
-    public final static double SWEEPERSERVOR_MIN_RANGE = 0;
-    public final static double SWEEPERSERVOR_MAX_RANGE = -1;
+    public final static double SWEEPERSERVOL_MAX_RANGE = -0.9;
+    public final static double SWEEPERSERVOR_MIN_RANGE = 0.9;
+    public final static double SWEEPERSERVOR_MAX_RANGE = 0;
 
 
     /* Local OpMode members. */
@@ -113,6 +114,8 @@ public class Hardware2858
         teamMarker  = hwMap.get(Servo.class, "team_Marker");
         teamMarker.setPosition(TEAMMARKER_HOME);
         sweeperServoL = hwMap.get(Servo.class, "sweeper_Servo_L");
+        sweeperServoL.setPosition(SWEEPERSERVOL_HOME);
         sweeperServoR = hwMap.get(Servo.class, "sweeper_Servo_R");
+        sweeperServoR.setPosition(SWEEPERSERVOR_HOME);
     }
 }
