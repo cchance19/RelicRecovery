@@ -66,7 +66,7 @@ public class Hardware2858
     public final static double SWEEPERSERVOL_MIN_RANGE = 0;
     public final static double SWEEPERSERVOL_MAX_RANGE = 1;
     public final static double SWEEPERSERVOR_MIN_RANGE = 0;
-    public final static double SWEEPERSERVOR_MAX_RANGE = 1;
+    public final static double SWEEPERSERVOR_MAX_RANGE = -1;
 
 
     /* Local OpMode members. */
@@ -90,6 +90,7 @@ public class Hardware2858
         gripperDrive = hwMap.get(DcMotor.class, "gripper_drive");
         leftDriveIN.setDirection(DcMotor.Direction.REVERSE);
         rightDriveOUT.setDirection(DcMotor.Direction.REVERSE);
+        gripperDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
         leftDriveOUT.setPower(0);
