@@ -70,31 +70,28 @@ public class Autonomous2858Crater extends LinearOpMode {
     Hardware2858 robot = new Hardware2858();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double COUNTS_PER_MOTOR_REV = 219.174419;    // eg: REV Motor Encoder
-    static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
-    static final double WHEEL_DIAMETER_INCHES = 6.0;     // For figuring circumference
+    static final double COUNTS_PER_MOTOR_REV = 1120;    // eg: REV Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 1.66;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 3.54331;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double DRIVE_SPEED = 0.75;
-    static final double TURN_SPEED = 0.75;
-    static final double SLOW_SPEED = 0.25;
+    static final double DRIVE_SPEED = 0.5;
+    static final double TURN_SPEED = 0.25;
+    static final double SLOW_SPEED = 0.35;
 
-    static final double SWEEPER_COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double GRIPPER_COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             3.1414;
 
-    static final double LIFT_COUNTS_PER_MOTOR_REV = 4317.5487;    // eg: REV Motor Encoder
-    //static final double LIFT_COUNTS_PER_MOTOR_REV = 4833.07692307;    // eg: REV Motor Encoder
-    //static final double LIFT_COUNTS_PER_MOTOR_REV = 4764.60834;    // eg: REV Motor Encoder
-    //static final double LIFT_COUNTS_PER_MOTOR_REV = 6806.58333;    // eg: REV Motor Encoder
+    static final double LIFT_COUNTS_PER_MOTOR_REV = 1479.12291667;    // eg: REV Motor Encoder
     static final double LIFT_COUNTS_PER_INCH = (LIFT_COUNTS_PER_MOTOR_REV) / (3.1415);
-    static final double LIFT_SPEED = 1;
+    static final double LIFT_SPEED = 0.75;
 
-    public GoldAlignDetector detector;
-    //public GoldMineralDetector detector;
+    //public GoldAlignDetector detector;
+    public GoldMineralDetector detector;
 
     @Override
     public void runOpMode() {
-/*
+
         detector = new GoldMineralDetector();
 
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
@@ -113,8 +110,8 @@ public class Autonomous2858Crater extends LinearOpMode {
         detector.enable();
 
         telemetry.addData("X Pos", detector.getScreenPosition().x); // Gold X pos.
-*/
 
+/*
         detector = new GoldAlignDetector();
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance());
         detector.useDefaults();
@@ -135,7 +132,7 @@ public class Autonomous2858Crater extends LinearOpMode {
 
         telemetry.addData("X Pos", detector.getXPosition()); // Gold X pos.
         telemetry.addData("IsAligned", detector.getAligned()); // Is the bot aligned with the gold mineral
-
+*/
 
         /*
          * Initialize the drive system variables.
@@ -147,28 +144,25 @@ public class Autonomous2858Crater extends LinearOpMode {
         telemetry.addData("Status", "Resetting Encoders");    //
         telemetry.update();
 
-        robot.leftDriveOUT.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftDriveIN.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDriveOUT.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightDriveIN.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.liftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.sweeperDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.gripperDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.leftDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.liftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.sweeperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.gripperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Path0", "Starting at %7d :%7d",
-                robot.leftDriveOUT.getCurrentPosition(),
-                robot.leftDriveIN.getCurrentPosition(),
-                robot.rightDriveOUT.getCurrentPosition(),
-                robot.rightDriveIN.getCurrentPosition(),
+                robot.leftDrive.getCurrentPosition(),
+                robot.rightDrive.getCurrentPosition(),
                 robot.liftDrive.getCurrentPosition());
         telemetry.update();
+
+        robot.gripperServoL.setPosition(0);
+        robot.gripperServoR.setPosition(0.9);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -178,85 +172,82 @@ public class Autonomous2858Crater extends LinearOpMode {
 
         robot.teamMarker.setPosition(-1.0);
 
-/*
+
         if (detector.getScreenPosition().x > 150 && detector.getScreenPosition().x < 450) {
-            liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
-            encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
-            encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
+            liftEncoderDrive(LIFT_SPEED, -6,  4.00);
+            encoderDrive(TURN_SPEED, 3, -3, 4.00);
             encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
+            encoderDrive(TURN_SPEED, -2.75, 2.75, 4.00);
+            encoderDrive(DRIVE_SPEED, -21, -21, 4.00);
+            encoderDrive(DRIVE_SPEED, 3,3,4.00);
+            encoderDrive(TURN_SPEED, -9, 9, 4.00);
+            encoderDrive(SLOW_SPEED, -47, -47, 7.00);
+            encoderDrive(SLOW_SPEED, 0.5, 0.5, 4.00);
             encoderDrive(TURN_SPEED, -2.25, 2.25, 4.00);
-            encoderDrive(DRIVE_SPEED, -5.25, -5.25, 4.00);
-            encoderDrive(DRIVE_SPEED, -19, -19, 4.00);
-            encoderDrive(DRIVE_SPEED, 16, 16, 4.00);
-            encoderDrive(DRIVE_SPEED, -8, -8, 4.00);
-            encoderDrive(TURN_SPEED, 11.65, -11.65, 4.00);
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -1.5,-1.5,4.00);
-            encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
 
-            robot.teamMarker.setPosition(1.0);
+            encoderDrive(SLOW_SPEED, -30, -30, 4.00);
+            encoderDrive(SLOW_SPEED, 5, 5, 4.00);
 
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -2,-1,4.00);
-            encoderDrive(LIFT_SPEED, -75, -75, 4.00);
-            encoderDrive(TURN_SPEED, -3, 3, 4.00);
-            encoderDrive(DRIVE_SPEED, -20,-20,4.00);
+            robot.gripperServoL.setPosition(0.9);
+            robot.gripperServoR.setPosition(0);
+
+            encoderDrive(TURN_SPEED, -0.25,0.25, 4.00);
+            encoderDrive(DRIVE_SPEED, 35, 35, 4.00);
+            encoderDrive(TURN_SPEED, -1.5,1.5,4.00);
+            encoderDrive(DRIVE_SPEED, 25,25,4.00);
         }
         else if (detector.getScreenPosition().x < 150) {
-            liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
-            encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
-            encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
+            liftEncoderDrive(LIFT_SPEED, -6,  4.00);
+            encoderDrive(TURN_SPEED, 3, -3, 4.00);
             encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
-            encoderDrive(TURN_SPEED, -2.25, 2.25, 4.00);
-            encoderDrive(DRIVE_SPEED, -5.25, -5.25, 4.00);
-            encoderDrive(DRIVE_SPEED, 5.5, -5.5, 4.00);
-            encoderDrive(DRIVE_SPEED, -27, -27, 4.00);
-            encoderDrive(DRIVE_SPEED, 17, 17, 4.00);
-            encoderDrive(TURN_SPEED, -5.5, 5.5, 4.00);
-            encoderDrive(TURN_SPEED, 11.95, -11.95, 4.00);
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -1.5, -1.5, 4.00);
-            encoderDrive(TURN_SPEED, -4.5, 4.5, 4.00);
+            encoderDrive(TURN_SPEED, -2.75, 2.75, 4.00);
+            encoderDrive(TURN_SPEED, -2.75, 2.75, 4.00);
+            encoderDrive(DRIVE_SPEED, -23, -23, 4.00);
+            encoderDrive(TURN_SPEED, -6.25,6.25,4.00);
+            encoderDrive(SLOW_SPEED, -25, -25, 7.00);
+            encoderDrive(SLOW_SPEED, 0.5, 0.5, 4.00);
+            encoderDrive(TURN_SPEED, -2.75, 2.75, 4.00);
 
-            robot.teamMarker.setPosition(1.0);
+            encoderDrive(SLOW_SPEED, -50, -50, 4.00);
+            encoderDrive(SLOW_SPEED, 5, 5, 4.00);
 
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -2,-1,4.00);
-            encoderDrive(LIFT_SPEED, -75, -75, 4.00);
-            encoderDrive(TURN_SPEED, -3, 3, 4.00);
-            encoderDrive(DRIVE_SPEED, -20,-20,4.00);
+            robot.gripperServoL.setPosition(0.9);
+            robot.gripperServoR.setPosition(0);
+
+            encoderDrive(TURN_SPEED, -0.25,0.25, 4.00);
+            encoderDrive(DRIVE_SPEED, 35, 35, 4.00);
+            encoderDrive(DRIVE_SPEED, 25,25,4.00);
         }
         else if (detector.getScreenPosition().x > 450) {
-            liftEncoderDrive(LIFT_SPEED, 4.25,  4.00);
-            encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
-            encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
+            liftEncoderDrive(LIFT_SPEED, -6,  4.00);
+            encoderDrive(TURN_SPEED, 3, -3, 4.00);
             encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
-            encoderDrive(TURN_SPEED, -2.25, 2.25, 4.00);
-            encoderDrive(DRIVE_SPEED, -5.25, -5.25, 4.00);
-            encoderDrive(TURN_SPEED, -9.5,9.5,4.00);
-            encoderDrive(DRIVE_SPEED, -27,-27,4.00);
-            encoderDrive(TURN_SPEED, 3.5,-3.5,4.00);
-            encoderDrive(TURN_SPEED, 12,-12,4.00);
-            encoderDrive(DRIVE_SPEED, 30,30,4.00);
-            encoderDrive(DRIVE_SPEED, -0.5,-0.5,4.00);
-            encoderDrive(TURN_SPEED, -3.5,3.5,4.00);
-            encoderDrive(DRIVE_SPEED, 5,5,4.00);
-            encoderDrive(TURN_SPEED, 0.5,-0.5,4.00);
+            encoderDrive(TURN_SPEED, -2.75, 2.75, 4.00);
+            encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
+            encoderDrive(DRIVE_SPEED, -23,-23,4.00);
+            encoderDrive(DRIVE_SPEED, 3,3,4.00);
+            encoderDrive(TURN_SPEED, -10.5,10.5,4.00);
+            encoderDrive(SLOW_SPEED, -52,-52,7.00);
+            encoderDrive(SLOW_SPEED, 0.5,0.5,4.00);
+            encoderDrive(TURN_SPEED, -2.75, 2.75, 4.00);
 
-            robot.teamMarker.setPosition(1.0);
+            encoderDrive(SLOW_SPEED, -35, -35, 4.00);
+            encoderDrive(SLOW_SPEED, 5, 5, 4.00);
 
-            encoderDrive(DRIVE_SPEED, 50, 50, 4.00);
-            encoderDrive(DRIVE_SPEED, -2,-1,4.00);
-            encoderDrive(LIFT_SPEED, -75, -75, 4.00);
-            encoderDrive(TURN_SPEED, -3, 3, 4.00);
-            encoderDrive(DRIVE_SPEED, -20,-20,4.00);
+            robot.gripperServoL.setPosition(0.9);
+            robot.gripperServoR.setPosition(0);
+
+            encoderDrive(TURN_SPEED, -0.25,0.25, 4.00);
+            encoderDrive(DRIVE_SPEED, 35, 35, 4.00);
+            encoderDrive(TURN_SPEED, -1.5,1.5,4.00);
+            encoderDrive(DRIVE_SPEED, 25,25,4.00);
         }
-*/
-
-     //   sweeperEncoderDrive(LIFT_SPEED, 1,4.00);
 
 
-        liftEncoderDrive(LIFT_SPEED, 4.875,  4.00);
+     //   gripperEncoderDrive(LIFT_SPEED, 1,4.00);
+
+/*
+        liftEncoderDrive(LIFT_SPEED, 6.5,  4.00);
         encoderDrive(DRIVE_SPEED, 0.5, 0.5, 4.00);
         encoderDrive(TURN_SPEED, 2.25, -2.25, 4.00);
         encoderDrive(DRIVE_SPEED, -3, -3, 4.00);
@@ -309,7 +300,7 @@ public class Autonomous2858Crater extends LinearOpMode {
         encoderDrive(TURN_SPEED, -3, 3, 4.00);
         encoderDrive(DRIVE_SPEED, -20,-20,4.00);
 
-
+*/
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
@@ -326,25 +317,19 @@ public class Autonomous2858Crater extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.leftDriveOUT.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.rightDriveOUT.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
-            robot.leftDriveOUT.setTargetPosition(newLeftTarget);
-            robot.leftDriveIN.setTargetPosition(newLeftTarget);
-            robot.rightDriveOUT.setTargetPosition(newRightTarget);
-            robot.rightDriveIN.setTargetPosition(newRightTarget);
+            newLeftTarget = robot.leftDrive.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+            newRightTarget = robot.rightDrive.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+            robot.leftDrive.setTargetPosition(newLeftTarget);
+            robot.rightDrive.setTargetPosition(newRightTarget);
 
             // Turn On RUN_TO_POSITION
-            robot.leftDriveOUT.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.leftDriveIN.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rightDriveOUT.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rightDriveIN.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.leftDriveOUT.setPower(Math.abs(speed));
-            robot.leftDriveIN.setPower(Math.abs(speed));
-            robot.rightDriveOUT.setPower(Math.abs(speed));
-            robot.rightDriveIN.setPower(Math.abs(speed));
+            robot.leftDrive.setPower(Math.abs(speed));
+            robot.rightDrive.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -354,29 +339,23 @@ public class Autonomous2858Crater extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.leftDriveOUT.isBusy() && robot.leftDriveIN.isBusy() && robot.rightDriveOUT.isBusy() && robot.rightDriveIN.isBusy())) {
+                    (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
-                        robot.leftDriveOUT.getCurrentPosition(),
-                        robot.leftDriveIN.getCurrentPosition(),
-                        robot.rightDriveOUT.getCurrentPosition(),
-                        robot.rightDriveIN.getCurrentPosition());
+                        robot.leftDrive.getCurrentPosition(),
+                        robot.rightDrive.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            robot.leftDriveOUT.setPower(0);
-            robot.leftDriveIN.setPower(0);
-            robot.rightDriveOUT.setPower(0);
-            robot.rightDriveIN.setPower(0);
+            robot.leftDrive.setPower(0);
+            robot.rightDrive.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            robot.leftDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.leftDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.rightDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.rightDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -424,26 +403,26 @@ public class Autonomous2858Crater extends LinearOpMode {
         }
     }
 
-    public void sweeperEncoderDrive(double speed,
-                             double sweeperInches,
+    public void gripperEncoderDrive(double speed,
+                             double gripperInches,
                              double timeoutS) {
-        int newSweeperTarget;
+        int newGripperTarget;
 
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newSweeperTarget = robot.sweeperDrive.getCurrentPosition() + (int) (sweeperInches * SWEEPER_COUNTS_PER_INCH);
-            robot.sweeperDrive.setTargetPosition(newSweeperTarget);
+            newGripperTarget = robot.gripperDrive.getCurrentPosition() + (int) (gripperInches * GRIPPER_COUNTS_PER_INCH);
+            robot.gripperDrive.setTargetPosition(newGripperTarget);
 
 
             // Turn On RUN_TO_POSITION
-            robot.sweeperDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.gripperDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.sweeperDrive.setPower(Math.abs(speed));
+            robot.gripperDrive.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -453,20 +432,20 @@ public class Autonomous2858Crater extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.sweeperDrive.isBusy())) {
+                    (robot.gripperDrive.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1", "Running to %7d :%7d", newSweeperTarget);
+                telemetry.addData("Path1", "Running to %7d :%7d", newGripperTarget);
                 telemetry.addData("Path2", "Running at %7d :%7d",
-                        robot.sweeperDrive.getCurrentPosition());
+                        robot.gripperDrive.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            robot.sweeperDrive.setPower(0);
+            robot.gripperDrive.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            robot.sweeperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.gripperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 }

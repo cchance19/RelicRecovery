@@ -44,8 +44,10 @@ public class DriverControl2858 extends LinearOpMode {
     Hardware2858 robot = new Hardware2858();// Use a K9's hardware
 
     double teamMarkerPosition = robot.TEAMMARKER_HOME;                   // Servo safe position
-    double sweeperServoLPosition = robot.SWEEPERSERVOL_HOME;
-    double sweeperServoRPosition = robot.SWEEPERSERVOR_HOME;
+    double gripperServoLPosition = robot.gripperSERVOL_HOME;
+    double gripperServoRPosition = robot.gripperSERVOR_HOME;
+    final double GRIPPERSERVOL_SPEED = 0.1;
+    final double GRIPPERSERVOR_SPEED = 0.1;
 
     @Override
     public void runOpMode() {
@@ -73,35 +75,32 @@ public class DriverControl2858 extends LinearOpMode {
             double right;
             double liftUp = gamepad1.right_trigger;
             double liftDown = gamepad1.left_trigger;
-            double sweeperOut = gamepad2.right_trigger;
-            double sweeperIn = gamepad2.left_trigger;
-            double gripper = gamepad2.right_stick_y;
+            double gripperOut = gamepad2.right_trigger;
+            double gripperIn = gamepad2.left_trigger;
+            double arm = gamepad2.right_stick_y;
 
             robot.teamMarker.setPosition(0.0);
+
 
             // Run wheels in tank mode
             left = gamepad1.left_stick_y;
             right = gamepad1.right_stick_y;
-            robot.leftDriveOUT.setPower(-left);
-            robot.leftDriveIN.setPower(-left);
-            robot.rightDriveOUT.setPower(-right);
-            robot.rightDriveIN.setPower(-right);
-            robot.gripperDrive.setPower(gripper);
+            robot.leftDrive.setPower(-left * 0.6);
+            robot.rightDrive.setPower(-right * 0.6);
+            robot.armDrive.setPower(arm);
 
             if (gamepad2.right_trigger > gamepad2.left_trigger) {
-                robot.sweeperDrive.setPower(-sweeperOut);
-            }
-            else if (gamepad2.right_trigger < gamepad2.left_trigger) {
-                robot.sweeperDrive.setPower(sweeperIn);
-            }
-            else if (gamepad2.right_trigger == gamepad2.left_trigger) {
-                    robot.sweeperDrive.setPower(0);
+                robot.gripperDrive.setPower(-gripperOut);
+            } else if (gamepad2.right_trigger < gamepad2.left_trigger) {
+                robot.gripperDrive.setPower(gripperIn);
+            } else if (gamepad2.right_trigger == gamepad2.left_trigger) {
+                robot.gripperDrive.setPower(0);
             }
 
             if (gamepad1.right_trigger > gamepad1.left_trigger) {
-                robot.liftDrive.setPower(liftUp);
+                robot.liftDrive.setPower(-liftUp);
             } else if (gamepad1.right_trigger < gamepad1.left_trigger) {
-                robot.liftDrive.setPower(-liftDown);
+                robot.liftDrive.setPower(liftDown);
             } else if (gamepad1.right_trigger == gamepad1.left_trigger) {
                 robot.liftDrive.setPower(0);
             }
@@ -127,45 +126,37 @@ public class DriverControl2858 extends LinearOpMode {
                     robot.liftDrive.getCurrentPosition());
             telemetry.update();
 
-                teamMarkerPosition = Range.clip(teamMarkerPosition, robot.TEAMMARKER_MIN_RANGE, robot.TEAMMARKER_MAX_RANGE);
-                robot.teamMarker.setPosition(teamMarkerPosition);
+            teamMarkerPosition = Range.clip(teamMarkerPosition, robot.TEAMMARKER_MIN_RANGE, robot.TEAMMARKER_MAX_RANGE);
+            robot.teamMarker.setPosition(teamMarkerPosition);
 
-                if (gamepad2.a) {
-                    //sweeperServoLPosition = robot.SWEEPERSERVOL_MIN_RANGE;
-                    //sweeperServoRPosition = robot.SWEEPERSERVOR_MAX_RANGE;
-                    robot.sweeperServoL.setPosition(0);
-                }
-                else if (gamepad2.b) {
-                    //sweeperServoLPosition = robot.SWEEPERSERVOL_MAX_RANGE;
-                    //sweeperServoRPosition = robot.SWEEPERSERVOR_MIN_RANGE;
-                    robot.sweeperServoL.setPosition(-0.9);
-                }
+            if (gamepad2.a)
+                gripperServoLPosition += GRIPPERSERVOL_SPEED;
+            else if (gamepad2.b)
+                gripperServoLPosition -= GRIPPERSERVOL_SPEED;
 
-                if (gamepad2.a) {
-                //sweeperServoLPosition = robot.SWEEPERSERVOL_MIN_RANGE;
-                //sweeperServoRPosition = robot.SWEEPERSERVOR_MAX_RANGE;
-                    robot.sweeperServoR.setPosition(0);
-                }
-                else if (gamepad2.b) {
-                //sweeperServoLPosition = robot.SWEEPERSERVOL_MAX_RANGE;
-                //sweeperServoRPosition = robot.SWEEPERSERVOR_MIN_RANGE;
-                    robot.sweeperServoR.setPosition(0.9);
-                }
 
-                sweeperServoLPosition = Range.clip(sweeperServoLPosition, robot.SWEEPERSERVOL_MIN_RANGE, robot.SWEEPERSERVOL_MAX_RANGE);
-                sweeperServoRPosition = Range.clip(sweeperServoRPosition, robot.SWEEPERSERVOR_MIN_RANGE, robot.SWEEPERSERVOR_MAX_RANGE);
-                robot.sweeperServoL.setPosition(sweeperServoLPosition);
-                robot.sweeperServoR.setPosition(sweeperServoRPosition);
+            if (gamepad2.y)
+                gripperServoRPosition += GRIPPERSERVOR_SPEED;
+            else if (gamepad2.x)
+                gripperServoRPosition -= GRIPPERSERVOR_SPEED;
 
-                // Send telemetry message to signify robot running;
-                telemetry.addData("left", "%.2f", left);
-                telemetry.addData("right", "%.2f", right);
-                telemetry.addData("liftUp", "%.2f", liftUp);
-                telemetry.addData("liftDown", "%.2f", liftDown);
-                telemetry.addData("sweeperOut", "%.2f", sweeperOut);
-                telemetry.addData("sweeperIn", "%.2f", sweeperIn);
-                telemetry.addData("gripper", "%.2f", gripper);
-                telemetry.update();
+
+            gripperServoLPosition = Range.clip(gripperServoLPosition, robot.gripperSERVOL_MIN_RANGE, robot.gripperSERVOL_MAX_RANGE);
+            robot.gripperServoL.setPosition(gripperServoLPosition);
+            gripperServoRPosition = Range.clip(gripperServoRPosition, robot.gripperSERVOR_MIN_RANGE, robot.gripperSERVOR_MAX_RANGE);
+            robot.gripperServoR.setPosition(gripperServoRPosition);
+
+            // Send telemetry message to signify robot running;
+            telemetry.addData("left", "%.2f", left);
+            telemetry.addData("right", "%.2f", right);
+            telemetry.addData("liftUp", "%.2f", liftUp);
+            telemetry.addData("liftDown", "%.2f", liftDown);
+            telemetry.addData("gripperOut", "%.2f", gripperOut);
+            telemetry.addData("gripperIn", "%.2f", gripperIn);
+            telemetry.addData("arm", "%.2f", arm);
+            telemetry.addData("gripperServoL", "%.2f", gripperServoLPosition);
+            telemetry.addData("gripperServoR", "%.2f", gripperServoRPosition);
+            telemetry.update();
             }
         }
     }

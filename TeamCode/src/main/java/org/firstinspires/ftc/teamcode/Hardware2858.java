@@ -48,26 +48,24 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Hardware2858
 {
     // Public OpMode members.
-    public DcMotor  leftDriveOUT   = null;
-    public DcMotor  leftDriveIN   = null;
-    public DcMotor  rightDriveOUT  = null;
-    public DcMotor  rightDriveIN  = null;
+    public DcMotor  leftDrive   = null;
+    public DcMotor  rightDrive  = null;
     public DcMotor  liftDrive       = null;
     public Servo    teamMarker      = null;
-    public DcMotor  sweeperDrive    = null;
-    public Servo    sweeperServoL    = null;
-    public Servo    sweeperServoR    = null;
     public DcMotor  gripperDrive    = null;
+    public Servo    gripperServoL    = null;
+    public Servo    gripperServoR    = null;
+    public DcMotor  armDrive    = null;
 
     public final static double TEAMMARKER_HOME = 0;
     public final static double TEAMMARKER_MIN_RANGE = -1.0;
     public final static double TEAMMARKER_MAX_RANGE = 1.0;
-    public final static double SWEEPERSERVOL_HOME = -0.9;
-    public final static double SWEEPERSERVOR_HOME = 0.9;
-    public final static double SWEEPERSERVOL_MIN_RANGE = 0;
-    public final static double SWEEPERSERVOL_MAX_RANGE = -0.9;
-    public final static double SWEEPERSERVOR_MIN_RANGE = 0.9;
-    public final static double SWEEPERSERVOR_MAX_RANGE = 0;
+    public final static double gripperSERVOL_HOME = 0.9;
+    public final static double gripperSERVOR_HOME = 0.0;
+    public final static double gripperSERVOL_MIN_RANGE = 0;
+    public final static double gripperSERVOL_MAX_RANGE = 0.9;
+    public final static double gripperSERVOR_MIN_RANGE = 0;
+    public final static double gripperSERVOR_MAX_RANGE = 0.9;
 
 
     /* Local OpMode members. */
@@ -82,40 +80,33 @@ public class Hardware2858
         hwMap = ahwMap;
 
         // Define and Initialize Mecanum Motors
-        leftDriveOUT  = hwMap.get(DcMotor.class, "left_drive_out");
-        leftDriveIN  = hwMap.get(DcMotor.class, "left_drive_in");
-        rightDriveOUT = hwMap.get(DcMotor.class, "right_drive_out");
-        rightDriveIN = hwMap.get(DcMotor.class, "right_drive_in");
+        leftDrive  = hwMap.get(DcMotor.class, "left_drive");
+        rightDrive = hwMap.get(DcMotor.class, "right_drive");
         liftDrive = hwMap.get(DcMotor.class, "lift_drive");
-        sweeperDrive = hwMap.get(DcMotor.class, "sweeper_drive");
         gripperDrive = hwMap.get(DcMotor.class, "gripper_drive");
-        leftDriveIN.setDirection(DcMotor.Direction.REVERSE);
-        rightDriveOUT.setDirection(DcMotor.Direction.REVERSE);
-        gripperDrive.setDirection(DcMotor.Direction.REVERSE);
+        armDrive = hwMap.get(DcMotor.class, "arm_drive");
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        armDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
-        leftDriveOUT.setPower(0);
-        leftDriveIN.setPower(0);
-        rightDriveOUT.setPower(0);
-        rightDriveIN.setPower(0);
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
         liftDrive.setPower(0);
-        sweeperDrive.setPower(0);
         gripperDrive.setPower(0);
+        armDrive.setPower(0);
 
         // Set all mecanum motors to run using encoders.
-        leftDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDriveOUT.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightDriveIN.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        sweeperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         gripperDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         teamMarker  = hwMap.get(Servo.class, "team_Marker");
         teamMarker.setPosition(TEAMMARKER_HOME);
-        sweeperServoL = hwMap.get(Servo.class, "sweeper_Servo_L");
-        sweeperServoL.setPosition(SWEEPERSERVOL_HOME);
-        sweeperServoR = hwMap.get(Servo.class, "sweeper_Servo_R");
-        sweeperServoR.setPosition(SWEEPERSERVOR_HOME);
+        gripperServoL = hwMap.get(Servo.class, "gripper_servo_L");
+        gripperServoL.setPosition(gripperSERVOL_HOME);
+        gripperServoR = hwMap.get(Servo.class, "gripper_servo_R");
+        gripperServoR.setPosition(gripperSERVOR_HOME);
     }
 }
